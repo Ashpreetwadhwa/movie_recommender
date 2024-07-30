@@ -21,40 +21,18 @@ def fetch_poster(movie_id):
 # Function to recommend movies
 def recommend(movie):
     try:
-        # Debugging: Print the input movie title
-        st.write(f"Selected movie: {movie}")
-
-        # Find the index of the selected movie
         index = movies[movies['title'] == movie].index[0]
-
-        # Debugging: Print the index of the selected movie
-        st.write(f"Index of selected movie: {index}")
-
-        # Calculate similarity distances
         distances = sorted(list(enumerate(similarity[index])), reverse=True, key=lambda x: x[1])
-
-        # Debugging: Print the calculated distances
-        st.write(f"Similarity distances: {distances[:5]}")
-
         recommended_movie_names = []
         recommended_movie_posters = []
-
         for i in distances[1:6]:  # Skip the first index as it is the movie itself
             movie_id = i[0]  # Use .get to avoid KeyError
-
-            # Debugging: Print the movie ID
-            st.write(f"Movie ID: {movie_id}")
-
             if pd.notna(movie_id):  # Check if movie_id is not NaN
-                recommended_movie_posters.append(fetch_poster(movie_id))
+                recommended_movie_posters.append("https://via.placeholder.com/500x750?text=No+Image+Available")
                 recommended_movie_names.append(movies.iloc[i[0]].get('title', 'Unknown Title'))
             else:
                 recommended_movie_names.append('Unknown Title')
                 recommended_movie_posters.append("https://via.placeholder.com/500x750?text=No+Image+Available")
-
-        # Debugging: Print the recommended movie names and posters
-        st.write(f"Recommended movie names: {recommended_movie_names}")
-        st.write(f"Recommended movie posters: {recommended_movie_posters}")
 
         return recommended_movie_names, recommended_movie_posters
     except Exception as e:
